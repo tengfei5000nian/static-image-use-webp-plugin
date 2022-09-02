@@ -1,5 +1,10 @@
+import 'webpack/types'
+
 import path from 'path'
-import { Compiler, Compilation, NormalModule, EntryNormalized } from 'webpack'
+import { Dependency, NormalModule } from 'webpack'
+
+import type { Compiler, Compilation, EntryNormalized } from 'webpack'
+import type { ReplaceSource } from 'webpack-sources'
 
 function isPlainObject(value: unknown): boolean {
   if (Object.prototype.toString.call(value) !== '[object Object]') {
@@ -8,6 +13,22 @@ function isPlainObject(value: unknown): boolean {
 
   const prototype = Object.getPrototypeOf(value);
   return prototype === null || prototype === Object.getPrototypeOf({})
+}
+
+class TempDependency extends Dependency {
+  constructor() {
+    super()
+  }
+
+  static Template = class Template extends DependencyTemplate {
+    constructor() {
+  
+    }
+  
+    apply(dependency: Dependency, source: ReplaceSource) {
+      
+    }
+  }
 }
 
 export interface Options {
@@ -59,7 +80,12 @@ export default class StaticImageUseWebpPlugin {
   }
 
   setExtensionToggle(compiler: Compiler): void {
-    compiler.hooks.thisCompilation.tap(this.pluginName, (compilation) => {
+    compiler.hooks.thisCompilation.tap(this.pluginName, (compilation: Compilation): void => {
+      compilation.dependencyTemplates.set(
+        TempDependency,
+        new TempDependency.Template()
+      )
+
       const hooks = NormalModule.getCompilationHooks(compilation)
       hooks.loader.tap(this.pluginName, (loaderContext, module: NormalModule) => {
         if (!this.test.test(module.resource)) return
