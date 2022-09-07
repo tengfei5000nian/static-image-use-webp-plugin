@@ -1,0 +1,50 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "isSupportWebpPath": {
+      "description": "设置global参数isSupportWebp，用来判断是否支持webp。浏览器中它是window.isSupportWebp: boolean。",
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "includeExtension": {
+      "description": "需要支持webp的图片扩展名数组。默认：png、jpg、jpeg",
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "imageminWebpOptions": {
+      "description": "imagemin-webp的options",
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object"
+        }
+      ]
+    },
+    "fileLoaderOptions": {
+      "description": "file-loader的options",
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object"
+        }
+      ]
+    }
+  },
+  "type": "object"
+}

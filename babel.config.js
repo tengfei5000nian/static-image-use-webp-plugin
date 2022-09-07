@@ -12,7 +12,6 @@ const babel = {
         },
       },
     ],
-    '@babel/preset-typescript',
   ],
 };
 
