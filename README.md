@@ -2,7 +2,7 @@
 
 一个webpack插件，用来为静态图片创建webp格式备份，并判断浏览器兼容动态切换。
 
-> NOTE: Node v10+ and webpack v5+ are supported and tested.
+> NOTE: Node v10+ and webpack v4+ are supported and tested.
 
 ## 关于
 
