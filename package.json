@@ -23,8 +23,7 @@
     "url": "https://github.com/tengfei5000nian/static-image-use-webp-plugin.git"
   },
   "peerDependencies": {
-    "webpack": ">=5.0.0 <6.0.0",
-    "webpack-sources": ">=3.0.0 <4.0.0"
+    "webpack": ">=5.0.0 <6.0.0"
   },
   "scripts": {
     "clean": "del-cli --dot=true \"./dist/**/*\"",
