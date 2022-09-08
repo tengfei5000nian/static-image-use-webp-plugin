@@ -1,8 +1,8 @@
 {
   "additionalProperties": true,
   "properties": {
-    "isSupportWebpPath": {
-      "description": "设置global参数isSupportWebp，用来判断是否支持webp。浏览器中它是window.isSupportWebp: boolean。",
+    "isSupportWebpModule": {
+      "description": "判断是否支持webp模块路径。",
       "anyOf": [
         {
           "type": "null"

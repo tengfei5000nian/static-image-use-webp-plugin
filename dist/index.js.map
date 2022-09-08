@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","names":["StaticImageUseWebpPlugin"],"sources":["../src/index.js"],"sourcesContent":["import StaticImageUseWebpPlugin from './plugin'\nimport isSupportWebp from './support'\n\nexport {\n  isSupportWebp\n}\n\nexport default StaticImageUseWebpPlugin\n"],"mappings":";;;;;;;;;;;;;AAAA;;AACA;;;;eAMeA,e"}

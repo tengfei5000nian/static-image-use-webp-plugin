@@ -14,10 +14,28 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
  * @param {String} data content.toString()的值
- * @return {Boolean} 是否是导出模块文件路径
+ * @return {Boolean} 是否是CommonJs导出模块
 */
-function isExportPath(data) {
-  return /export\sdefault|module\.exports/.test(data);
+function isCommonExport(data) {
+  return /module\.exports/.test(data);
+}
+/**
+ * @param {String} data content.toString()的值
+ * @return {Boolean} 是否是ES6导出模块
+*/
+
+
+function isES6Export(data) {
+  return /export\sdefault/.test(data);
+}
+/**
+ * @param {String} data content.toString()的值
+ * @return {Boolean} 是否是导出模块
+*/
+
+
+function isExportModule(data) {
+  return isCommonExport(data) || isES6Export(data);
 }
 /**
  * @param {Array} includeExtensions 要求生成webp的图片扩展名数组
@@ -50,7 +68,7 @@ function getExportName(module, data) {
 function getImageContent(loaderContext, content) {
   const data = content.toString();
 
-  if (isExportPath(data)) {
+  if (isExportModule(data)) {
     var _loaderContext$curren;
 
     if (!extensionRegExp(loaderContext.query.includeExtensions).test(data)) return null;
@@ -81,7 +99,7 @@ async function createWebpContent(loaderContext, imageContent) {
 function createPublicPath(loaderContext, content, sourceMap) {
   const data = content.toString();
 
-  if (isExportPath(data)) {
+  if (isExportModule(data)) {
     return data;
   } else {
     const fileLoaderContext = Object.assign({}, loaderContext, {
@@ -110,7 +128,15 @@ function setWebpToggle(loaderContext, webpContent, exportPath, sourceMap) {
   const extRE = extensionRegExp(loaderContext.query.includeExtensions);
   const webpImageName = otherImageName.replace(extRE, (res, ext) => res.replace(ext, 'webp'));
   loaderContext.emitFile(webpImageName, webpContent, sourceMap, (_loaderContext$curren2 = loaderContext.currentModule.buildInfo.assetsInfo) === null || _loaderContext$curren2 === void 0 ? void 0 : _loaderContext$curren2.get(otherImageName));
-  return exportPath.replace(extRE, (res, ext) => res.replace(ext, `" + (global.isSupportWebp === true ? "webp" : "${ext}") + "`));
+  let isSupportWebp = '';
+
+  if (isCommonExport(exportPath)) {
+    isSupportWebp = `const isSupportWebp = require("${loaderContext.query.isSupportWebpModule}").default;\n`;
+  } else if (isES6Export(exportPath)) {
+    isSupportWebp = `import isSupportWebp from "${loaderContext.query.isSupportWebpModule}";\n`;
+  }
+
+  return isSupportWebp.concat(exportPath.replace(extRE, (res, ext) => res.replace(ext, `" + (isSupportWebp === true ? "webp" : "${ext}") + "`)));
 }
 
 const raw = true;
@@ -140,4 +166,4 @@ async function _default(content, map, meta) {
     callback(err, '', map, meta);
   }
 }
-//# sourceMappingURL=static-image-use-webp-loader.js.map
+//# sourceMappingURL=loader.js.map

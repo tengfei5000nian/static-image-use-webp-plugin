@@ -1,0 +1,1 @@
+{"version":3,"file":"support.js","names":["document","createElement","toDataURL","indexOf"],"sources":["../src/support.js"],"sourcesContent":["export default document.createElement('canvas').toDataURL('image/webp', 0.5).indexOf('data:image/webp') === 0\n"],"mappings":";;;;;;;eAAeA,QAAQ,CAACC,aAAT,CAAuB,QAAvB,EAAiCC,SAAjC,CAA2C,YAA3C,EAAyD,GAAzD,EAA8DC,OAA9D,CAAsE,iBAAtE,MAA6F,C"}

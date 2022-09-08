@@ -9,7 +9,7 @@ const pluginName = 'static-image-use-webp-plugin'
 export default class StaticImageUseWebpPlugin {
   constructor(options = {}) {
     this.options = Object.assign({
-      isSupportWebpPath: path.join(__dirname, 'is-support-webp.js'),
+      isSupportWebpModule: `${pluginName}/dist/support.js`,
       includeExtensions: ['png', 'jpg', 'jpeg']
     }, options)
 
@@ -17,27 +17,8 @@ export default class StaticImageUseWebpPlugin {
   }
 
   apply(compiler) {
-    this.setVerifyIsSupportWebp(compiler)
-    this.setExtensionToggle(compiler)
-  }
-
-  setVerifyIsSupportWebp(compiler) {
-    compiler.hooks.entryOption.tap(pluginName, (_, entry) => {
-      if (typeof entry !== 'function') {
-        for (const name of Object.keys(entry)) {
-          entry[name].import?.unshift(this.options.isSupportWebpPath)
-        }
-      } else {
-        throw new Error(
-          `${pluginName} doesn't support dynamic entry (function) yet`
-        );
-      }
-    })
-  }
-
-  setExtensionToggle(compiler) {
     const isWebpackV5 = compiler.webpack && compiler.webpack.version >= '5'
-    const loader = path.join(__dirname, 'static-image-use-webp-loader.js')
+    const loader = path.join(__dirname, 'loader.js')
     const test = new RegExp(`\\.(${this.options.includeExtensions.join('|')})($|\\"|\\'|\\?)`)
 
     compiler.hooks.thisCompilation.tap(pluginName, compilation => {

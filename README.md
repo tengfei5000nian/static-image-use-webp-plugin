@@ -6,7 +6,7 @@
 
 ## 关于
 
-在生成图片模块的时候创建webp格式备份（如果webp格式不比原图像小不设置），然后在每个图片模块中判断global.isSupportWebp来切换导出的图片扩展名。
+在生成图片模块的时候创建webp格式备份（如果webp格式不比原图像小不设置），然后在每个图片模块中引入isSupportWebp模块判断兼容来切换导出的图片扩展名。
 
 ## 安装
 
@@ -30,10 +30,10 @@ module.exports = webpackConfig;
 
 ```js
 new StaticImageUseWebpPlugin({
-    // 设置global参数isSupportWebp，用来判断是否支持webp。浏览器中它是window.isSupportWebp: boolean。
+    // 判断是否支持webp模块路径。
     //
-    // default: static-image-use-webp-plugin/dist/is-support-webp.js
-    isSupportWebpPath: path.join(__dirname, 'is-support-webp.js'),
+    // default: static-image-use-webp-plugin/dist/support.js
+    isSupportWebpModule: 'static-image-use-webp-plugin/dist/support.js',
 
     // 需要支持webp的图片扩展名数组。
     //
@@ -54,14 +54,18 @@ new StaticImageUseWebpPlugin({
 });
 ```
 
-## global.isSupportWebp
+## isSupportWebpModule
+
+默认判断是否支持webp的模块。
+See static-image-use-webp-plugin/dist/support.js
 
 ```js
-global.isSupportWebp = document.createElement('canvas').toDataURL('image/webp', 0.5).indexOf('data:image/webp') === 0
+export default document.createElement('canvas').toDataURL('image/webp', 0.5).indexOf('data:image/webp') === 0
 ```
 
 ## 生成的图片模块
 
 ```js
-export default "test_image." + (global.isSupportWebp === true ? "webp" : "png") + ""
+import isSupportWebp from 'static-image-use-webp-plugin/dist/support.js';
+export default "test_image." + (isSupportWebp === true ? "webp" : "png") + ""
 ```
