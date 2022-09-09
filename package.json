@@ -5,7 +5,7 @@
   "description": "",
   "homepage": "https://github.com/tengfei5000nian/static-image-use-webp-plugin",
   "license": "MIT",
-  "main": "dist/index.js",
+  "main": "dist/plugin.js",
   "files": [
     "dist"
   ],
