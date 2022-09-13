@@ -103,11 +103,7 @@ function createPublicPath(loaderContext, content, sourceMap) {
     return data;
   } else {
     const fileLoaderContext = Object.assign({}, loaderContext, {
-      getOptions: () => {
-        var _loaderContext$getOpt;
-
-        return ((_loaderContext$getOpt = loaderContext.getOptions(loaderContext)) === null || _loaderContext$getOpt === void 0 ? void 0 : _loaderContext$getOpt.fileLoaderOptions) || {};
-      }
+      query: loaderContext.query.fileLoaderOptions || {}
     });
     return _fileLoader.default.call(fileLoaderContext, content, sourceMap);
   }

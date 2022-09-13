@@ -81,7 +81,7 @@ function createPublicPath(loaderContext, content, sourceMap) {
     return data
   } else {
     const fileLoaderContext = Object.assign({}, loaderContext, {
-      getOptions: () => loaderContext.getOptions(loaderContext)?.fileLoaderOptions || {}
+      query: loaderContext.query.fileLoaderOptions || {}
     })
     return fileLoader.call(fileLoaderContext, content, sourceMap)
   }
