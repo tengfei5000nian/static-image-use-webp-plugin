@@ -60,7 +60,7 @@ new StaticImageUseWebpPlugin({
 See static-image-use-webp-plugin/dist/support.js
 
 ```js
-export default document.createElement('canvas').toDataURL('image/webp', 0.5).indexOf('data:image/webp') === 0
+export default global.document?.createElement('canvas').toDataURL('image/webp', 0.5).indexOf('data:image/webp') === 0 || false
 ```
 
 ## 生成的图片模块
@@ -68,4 +68,47 @@ export default document.createElement('canvas').toDataURL('image/webp', 0.5).ind
 ```js
 import isSupportWebp from 'static-image-use-webp-plugin/dist/support.js';
 export default "test_image." + (isSupportWebp === true ? "webp" : "png") + ""
+```
+
+## vue-cli@5 中使用
+
+```js
+const StaticImageUseWebpPlugin = require('static-image-use-webp-plugin').default
+const { defineConfig } = require('@vue/cli-service')
+
+module.exports = defineConfig({
+  transpileDependencies: true,
+  configureWebpack: config => {
+    const rules = config.module.rules
+    const imageRule = rules.find(r => r.test.test('.png'))
+    const imageRuleIndex = rules.indexOf(imageRule)
+    rules.splice(
+      imageRuleIndex,
+      1,
+      {
+        test: /\.(png|jpe?g)(\?.*)?$/,
+        type: 'javascript/auto',
+      },
+      {
+        test: /\.(gif|webp|avif)(\?.*)?$/,
+        type: 'asset',
+        generator: { filename: 'img/[name].[hash:8][ext]' }
+      }
+    )
+
+    config.plugins.push(
+      new StaticImageUseWebpPlugin({
+        fileLoaderOptions: {
+          esModule: false,
+          name: 'img/[name].[hash:8].[ext]'
+        }
+      })
+    )
+  },
+  css: {
+    // 生产环境中想在style中动态使用切换功能需将extract设成false，否则在提取到css文件时默认不支持webp。
+    // See https://cli.vuejs.org/zh/config/#css-extract
+    extract: false
+  }
+})
 ```
