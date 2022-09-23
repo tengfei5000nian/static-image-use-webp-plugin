@@ -30,6 +30,11 @@ module.exports = webpackConfig;
 
 ```js
 new StaticImageUseWebpPlugin({
+    // 强制使用图片大小最小的方案，不处理webp的兼容问题，只导出一份图片，isSupportWebpModule将不是必须。
+    //
+    // default: false
+    forceMinSize: false,
+
     // 判断是否支持webp模块路径。
     //
     // default: static-image-use-webp-plugin/dist/support.js

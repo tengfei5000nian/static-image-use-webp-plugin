@@ -124,15 +124,22 @@ function setWebpToggle(loaderContext, webpContent, exportPath, sourceMap) {
   const extRE = extensionRegExp(loaderContext.query.includeExtensions);
   const webpImageName = otherImageName.replace(extRE, (res, ext) => res.replace(ext, 'webp'));
   loaderContext.emitFile(webpImageName, webpContent, sourceMap, (_loaderContext$curren2 = loaderContext.currentModule.buildInfo.assetsInfo) === null || _loaderContext$curren2 === void 0 ? void 0 : _loaderContext$curren2.get(otherImageName));
-  let isSupportWebp = '';
 
-  if (isCommonExport(exportPath)) {
-    isSupportWebp = `const isSupportWebp = require("${loaderContext.query.isSupportWebpModule}").default;\n`;
-  } else if (isES6Export(exportPath)) {
-    isSupportWebp = `import isSupportWebp from "${loaderContext.query.isSupportWebpModule}";\n`;
+  if (loaderContext.query.forceMinSize === true) {
+    delete loaderContext.currentModule.buildInfo.assets[otherImageName];
+    loaderContext.currentModule.buildInfo.assetsInfo.delete(otherImageName);
+    return exportPath.replace(extRE, (res, ext) => res.replace(ext, 'webp'));
+  } else {
+    let isSupportWebp = '';
+
+    if (isCommonExport(exportPath)) {
+      isSupportWebp = `const isSupportWebp = require("${loaderContext.query.isSupportWebpModule}").default;\n`;
+    } else if (isES6Export(exportPath)) {
+      isSupportWebp = `import isSupportWebp from "${loaderContext.query.isSupportWebpModule}";\n`;
+    }
+
+    return isSupportWebp.concat(exportPath.replace(extRE, (res, ext) => res.replace(ext, `" + (isSupportWebp === true ? "webp" : "${ext}") + "`)));
   }
-
-  return isSupportWebp.concat(exportPath.replace(extRE, (res, ext) => res.replace(ext, `" + (isSupportWebp === true ? "webp" : "${ext}") + "`)));
 }
 
 const raw = true;

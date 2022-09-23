@@ -20,8 +20,11 @@ const pluginName = 'static-image-use-webp-plugin';
 class StaticImageUseWebpPlugin {
   constructor(options = {}) {
     this.options = Object.assign({
+      forceMinSize: false,
       isSupportWebpModule: `${pluginName}/dist/support.js`,
-      includeExtensions: ['png', 'jpg', 'jpeg']
+      includeExtensions: ['png', 'jpg', 'jpeg'],
+      imageminWebpOptions: {},
+      fileLoaderOptions: {}
     }, options);
     (0, _schemaUtils.validate)(_options.default, this.options);
   }
